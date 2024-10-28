@@ -26,8 +26,16 @@ Before using this setup, ensure you have the following installed:
      ```yaml
      # image: spritsail/fivem:10230  # Uncomment this line and specify the artifact version of your choice
      ```
+   - If you have a license key, uncomment the `LICENSE_KEY` environment variable and replace `"license-key-here"` with your actual license key.
 
-3. **Start the Docker Compose Services**
+3. **Add the `server.cfg` File**
+
+   Make sure to add your `server.cfg` file in the specified path and update the Docker Compose file to reflect its location:
+   ```yaml
+   - ./path/to/server.cfg:/config/server.cfg
+   ```
+
+4. **Start the Docker Compose Services**
 
    Run the following command to start the RedM server, MariaDB, and phpMyAdmin:
    ```bash
@@ -45,7 +53,6 @@ To stop the services, use:
 ```bash
 docker-compose down
 ```
-
 This will stop and remove the containers, but your data will be preserved in the mounted volumes.
 
 ## Configuration Details
@@ -53,7 +60,8 @@ This will stop and remove the containers, but your data will be preserved in the
 ### RedM Service
 - Uses the FiveM Docker image to run the RedM server.
 - Ports `40120` and `30120` (TCP and UDP) are exposed for server communication.
-- The configuration and server data are persisted via mounted volumes.
+- The configuration, server data, and `server.cfg` are persisted via mounted volumes.
+- Includes an optional `LICENSE_KEY` environment variable that can be set.
 
 ### MariaDB Service
 - Uses the official MariaDB image.
@@ -65,7 +73,7 @@ This will stop and remove the containers, but your data will be preserved in the
 - Accessible at `http://localhost:8080`.
 
 ## Notes
-- Make sure to secure your environment variables, especially database credentials.
+- Make sure to secure your environment variables, especially database credentials and license keys.
 - You may need to adjust firewall rules to allow external access to the server.
 
 ## Troubleshooting
@@ -76,3 +84,7 @@ This will stop and remove the containers, but your data will be preserved in the
 ## Contributing
 
 Feel free to submit issues, suggestions, or pull requests to improve this setup.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
