@@ -1,0 +1,58 @@
+version: "3.9"  # Specify Docker Compose version
+
+services:
+    redm:
+        image: spritsail/fivem:latest  # Use the latest FiveM server image
+        # image: spritsail/fivem:10230  # Uncomment this line and specify the artifact version of your choice
+        container_name: redm  # Name the container "redm"
+        environment:
+        - NO_LICENSE_KEY=1  # Disable license key requirement
+        - NO_DEFAULT_CONFIG=1  # Disable default configuration loading
+        - PUID=0  # Set user ID for permissions
+        - PGID=0  # Set group ID for permissions
+        # Optional license key for the server, replace "license-key-here" with your actual license key
+        # - LICENSE_KEY=license-key-here
+        volumes:
+        - ./config:/config  # Mount local "config" directory to container
+        - ./txData:/txData  # Mount local "txData" directory to container
+        - ./path/to/server.cfg:/config/server.cfg  # Mount the server.cfg file in the container
+        ports:
+        - '40120:40120'  # Map port 40120 for TCP
+        - '30120:30120'  # Map port 30120 for TCP
+        - '30120:30120/udp'  # Map port 30120 for UDP
+        restart: always  # Restart the container automatically if it stops
+        depends_on:
+        - redm_db  # Ensure the "redm_db" service starts before this one
+        command: +exec /config/server.cfg  # Run the server with the specified configuration file
+
+    redm_db:
+        image: mariadb:10.4.32  # Use a specific version of MariaDB
+        container_name: redm_db  # Name the container "redm_db"
+        environment:
+        - PUID=0  # Set user ID for permissions
+        - PGID=0  # Set group ID for permissions
+        - MYSQL_ROOT_PASSWORD=your_root_password  # Root password for MariaDB
+        - TZ=Europe/Paris  # Set the timezone to Europe/Paris
+        - MYSQL_DATABASE=your_database  # Name of the database to create
+        - MYSQL_USER=your_username  # Username for accessing the database
+        - MYSQL_PASSWORD=your_password  # Password for the database user
+        # - MYSQL_ALLOW_EMPTY_PASSWORD=yes  # Uncomment to allow an empty root password (not recommended)
+        command:
+            --sql_mode=NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION  # MariaDB configuration settings
+        ports:
+        - 3306:3306  # Map the MariaDB port
+        volumes:
+        - ./mysql:/var/lib/mysql  # Mount local "mysql" directory for database storage
+        # - ./mysql/my.cnf:/etc/mysql/my.cnf  # Optionally mount a custom MySQL configuration file
+        restart: always  # Restart the container automatically if it stops
+
+    phpmyadmin:
+        image: phpmyadmin  # Use the default phpMyAdmin image
+        restart: always  # Restart the container automatically if it stops
+        ports:
+        - 8080:80  # Map port 8080 to access phpMyAdmin in the browser
+        environment:
+        - PMA_ARBITRARY=1  # Allow connections to arbitrary MySQL/MariaDB servers
+        - UPLOAD_LIMIT=100M  # Set the maximum file upload size to 100 MB
+        depends_on:
+        - redm_db  # Ensure the "redm_db" service starts before this one
