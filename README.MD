@@ -1,7 +1,24 @@
 
 # RedM Server with MariaDB and phpMyAdmin - Docker Compose Setup
 
-This repository provides a Docker Compose configuration for setting up a RedM server on Linux, along with a MariaDB database and phpMyAdmin for database management. The setup is designed to be easily configurable and includes volume mappings to persist server and database data.
+This repository provides a Docker Compose configuration for setting up a pre-configured RedM server on Linux using Spritsail FiveM Docker image, along with a MariaDB database and phpMyAdmin for database management. The setup is designed to be easily configurable and includes volume mappings to persist server and database data.
+
+## Description
+
+This Docker Compose file allows for the easy installation and deployment of a pre-configured RedM server. With this Docker Compose setup, you can quickly set up a complete environment, including script management, mods, and specific configurations, providing a ready-to-use game server.
+
+### Objectives:
+- **RedM Server**: Simplifies the installation and startup of a RedM server with a pre-configured setup, allowing administrators to focus on adding content and adjusting server settings instead of building everything from scratch.
+- **MariaDB**: Provides a database to store server data such as player information, statistics, and persistent configurations.
+- **phpMyAdmin**: Offers a graphical interface for easily managing the MariaDB database via a web browser, allowing for the creation, modification, and administration of server data.
+
+### Advantages of this Docker Compose:
+- **Automation**: Enables deploying all three services (RedM, MariaDB, phpMyAdmin) with a single command, making server installation and maintenance more accessible.
+- **Centralized Configuration**: Simplifies parameter management and data volumes through a single `docker-compose.yml` file, offering a turnkey solution.
+- **Data Persistence**: Mounted volumes ensure that server configurations and database data are preserved even if the containers are stopped or restarted.
+- **Flexibility**: Supports custom configurations, including using a specific `server.cfg` file for RedM server settings, and allows the use of a license key for advanced features.
+
+This Docker Compose setup is ideal for RedM server administrators who want to install a pre-configured server quickly and easily, while still having the option to adjust settings and manage data in a centralized way.
 
 ## Docker Image
 
@@ -140,12 +157,8 @@ This will stop and remove the containers, but your data will be preserved in the
 
 ## Acknowledgements
 
-A special thanks to [Spritsail](https://github.com/spritsail) for their work on the FiveM Docker image, which serves as the foundation for this setup. Their contributions to the community are greatly appreciated!
+A special thanks to [Spritsail](https://github.com/spritsail) for their work on the FiveM Docker image, which serves as the foundation for this setup. Their contributions are greatly appreciated!
 
 ## Contributing
 
 Feel free to submit issues, suggestions, or pull requests to improve this setup.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
