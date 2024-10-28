@@ -1,11 +1,11 @@
 
 # RedM Server with MariaDB and phpMyAdmin - Docker Compose Setup
 
-This repository provides a Docker Compose configuration for setting up a RedM server on linux, along with a MariaDB database and phpMyAdmin for database management. The setup is designed to be easily configurable and includes volume mappings to persist server and database data.
+This repository provides a Docker Compose configuration for setting up a RedM server on Linux, along with a MariaDB database and phpMyAdmin for database management. The setup is designed to be easily configurable and includes volume mappings to persist server and database data.
 
 ## Docker Image
 
-This setup is based on the [Spritsail Docker image for FiveM](https://github.com/spritsail/fivem), which provides a containerized environment for running a FiveM server.
+This setup is based on the [Spritsail Docker image for FiveM](https://github.com/spritsail/fivem), which provides a containerized environment for running a FiveM/RedM server.
 
 ## Prerequisites
 
@@ -41,55 +41,55 @@ Before using this setup, ensure you have the following installed:
 
 4. **Example Configuration**
 
-   Here's an example of how to configure the `docker-compose.yml` file:
+   Here's an example of how to configure the `docker-compose.yml` file with detailed comments:
 
    ```yaml
-   version: "3.9"
+   version: "3.9"  # Use Docker Compose version 3.9
 
    services:
        redm:
-           image: spritsail/fivem:latest
-           container_name: redm
+           image: spritsail/fivem:latest  # Use the latest FiveM Docker image for RedM
+           container_name: redm  # Set the container name to "redm"
            environment:
-           - NO_LICENSE_KEY=1
-           - NO_DEFAULT_CONFIG=1
-           - PUID=1000  # Set your user ID (optional)
-           - PGID=1000  # Set your group ID (optional)
-           - LICENSE_KEY=your_license_key_here  # Replace with your actual license key
+           - NO_LICENSE_KEY=1  # Disable the need for a license key (set to 0 to enable)
+           - NO_DEFAULT_CONFIG=1  # Do not load the default server configuration
+           - PUID=1000  # Set the user ID for file permissions (optional)
+           - PGID=1000  # Set the group ID for file permissions (optional)
+           - LICENSE_KEY=your_license_key_here  # Replace with your actual server license key
            volumes:
-           - ./config:/config
-           - ./txData:/txData
-           - ./server.cfg:/config/server.cfg
+           - ./config:/config  # Mount the "config" directory for server configuration
+           - ./txData:/txData  # Mount the "txData" directory for server data
+           - ./server.cfg:/config/server.cfg  # Mount the "server.cfg" file for server settings
            ports:
-           - "30120:30120"
-           - "30120:30120/udp"
-           restart: always
+           - "30120:30120"  # Map the TCP port for the server
+           - "30120:30120/udp"  # Map the UDP port for the server
+           restart: always  # Restart the container automatically if it stops
 
        redm_db:
-           image: mariadb:10.4.32
-           container_name: redm_db
+           image: mariadb:10.4.32  # Use a specific version of the MariaDB image
+           container_name: redm_db  # Name the container "redm_db"
            environment:
-           - MYSQL_ROOT_PASSWORD=your_root_password
-           - TZ=Europe/Paris
-           - MYSQL_DATABASE=redm_db
-           - MYSQL_USER=redm_user
-           - MYSQL_PASSWORD=your_password
+           - MYSQL_ROOT_PASSWORD=your_root_password  # Set the root password for MariaDB
+           - TZ=Europe/Paris  # Set the timezone for the database
+           - MYSQL_DATABASE=redm_db  # Name of the database to create
+           - MYSQL_USER=redm_user  # Username for accessing the database
+           - MYSQL_PASSWORD=your_password  # Password for the database user
            ports:
-           - "3306:3306"
+           - "3306:3306"  # Expose the default MariaDB port
            volumes:
-           - ./mysql:/var/lib/mysql
-           restart: always
+           - ./mysql:/var/lib/mysql  # Mount the "mysql" directory for database storage
+           restart: always  # Restart the container automatically if it stops
 
        phpmyadmin:
-           image: phpmyadmin
-           restart: always
+           image: phpmyadmin  # Use the default phpMyAdmin image
+           restart: always  # Restart the container automatically if it stops
            ports:
-           - "8080:80"
+           - "8080:80"  # Map port 8080 to access phpMyAdmin through a web browser
            environment:
-           - PMA_ARBITRARY=1
-           - UPLOAD_LIMIT=100M
+           - PMA_ARBITRARY=1  # Allow phpMyAdmin to connect to any database server
+           - UPLOAD_LIMIT=100M  # Set the maximum file upload size to 100 MB
            depends_on:
-           - redm_db
+           - redm_db  # Ensure the "redm_db" service is started before this one
    ```
 
 5. **Start the Docker Compose Services**
