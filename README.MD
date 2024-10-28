@@ -1,5 +1,5 @@
 
-# 🚀 RedM Server with MariaDB and phpMyAdmin - Docker Compose Setup
+# 🐋 RedM Server with MariaDB and phpMyAdmin - Docker Compose Setup
 
 This repository provides a Docker Compose configuration for setting up a pre-configured RedM server on Linux using the Spritsail FiveM Docker image, along with a MariaDB database and phpMyAdmin for database management. 🛠️ The setup is designed to be easily configurable and includes volume mappings to persist server and database data. 🗃️
 
